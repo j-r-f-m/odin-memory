@@ -135,13 +135,13 @@ table {
 
 body {
   font-family: "Roboto", sans-serif;
-  background-color: lightgray;
+  background-color: #fffdd0;
 }
 
 #app--container {
   height: 100vh;
   display: grid;
-  grid-template-columns: repeat(12, [col-start]1fr);
+  grid-template-columns: repeat(12, [col-start] 1fr);
   grid-template-rows: repeat(12, [row-start] 1fr);
 }
 
@@ -166,5 +166,11 @@ body {
 
   display: grid;
   grid-template-columns: repeat(6, [col-start]1fr);
-  grid-template-rows: repeat(2, [row-start] 1fr);
+  grid-template-rows: repeat(6, [row-start]1fr);
+}
+
+#card--container {
+  grid-row: 2 / 6;
+  grid-column: 2 / 6;
+  background-color: lightgray;
 }

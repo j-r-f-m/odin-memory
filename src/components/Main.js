@@ -1,9 +1,10 @@
 import React from "react";
+import Card from "./card";
 
 const Main = () => {
   return (
     <div id="main--container">
-      <h2 id="main--title">Memory Game</h2>
+      <Card />
     </div>
   );
 };
