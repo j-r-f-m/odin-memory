@@ -2,6 +2,7 @@ import "./styles/styles.css";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
+import Counters from "./components/Score";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Header />
       <Main />
       <Footer />
+      <Counters />
     </div>
   );
 }

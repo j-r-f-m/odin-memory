@@ -184,3 +184,8 @@ body {
 .card:hover {
   background-color: yellow;
 }
+
+.win {
+  grid-row: 4 / 5;
+  grid-column: 2 / 4;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import imgAmy from "../images/amy.png";
 import imgBender from "../images/bender.png";
 import imgBrannigan from "../images/brannigan.png";
@@ -29,12 +29,16 @@ const Card = (props) => {
     { urlImg: imgZoidberg, id: uniqid(), clicked: false },
   ]);
 
-  //   const mapCards = () => {
-  //     console.log(cards);
-  //     // const images = props.cards;
-  //     const mappedCards = cards.map((card) => <img src={card.urlImg} />);
-  //   };
-
+  // keep track of current score and display best scoure since last refresh
+  const [score, setScore] = useState({
+    currScore: 0,
+    bestScore: 0,
+  });
+  // add the id of the clicked character to an array
+  // check length of array to see if player clicked all characters one time
+  const [alreadyClicked, setAlreadyClicked] = useState([]);
+  // show if player won or lost
+  const [gameStatus, setGameStatus] = useState({ gameWon: false });
   /**
    * update state of clicked object
    * updating object in array
@@ -53,35 +57,76 @@ const Card = (props) => {
     setCards([...newCardsArr]);
   };
 
+  /**
+   * shuffle a given array using the fisher-yates-algorithm
+   * @param {array} array that needs to be shuffled
+   */
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  };
+
+  const resetState = () => {
+    const defaultState = [
+      { urlImg: imgAmy, id: uniqid(), clicked: false },
+      { urlImg: imgBender, id: uniqid(), clicked: false },
+      { urlImg: imgBrannigan, id: uniqid(), clicked: false },
+      { urlImg: imgConrad, id: uniqid(), clicked: false },
+      { urlImg: imgFry, id: uniqid(), clicked: false },
+      { urlImg: imgLeela, id: uniqid(), clicked: false },
+      { urlImg: imgLuigi, id: uniqid(), clicked: false },
+      { urlImg: imgMario, id: uniqid(), clicked: false },
+      { urlImg: imgMom, id: uniqid(), clicked: false },
+      { urlImg: imgNibbler, id: uniqid(), clicked: false },
+      { urlImg: imgProfessor, id: uniqid(), clicked: false },
+      { urlImg: imgZoidberg, id: uniqid(), clicked: false },
+    ];
+    shuffleArray(defaultState);
+    setCards([...defaultState]);
+  };
+
+  /**
+   * update array with already clicked char
+   * @param {string} id of clicked char
+   */
+  const updateAlreadyClicked = (id) => {
+    setAlreadyClicked([...alreadyClicked, `${id}`]);
+  };
+
+  const emptyAlreadyClicked = () => {
+    setAlreadyClicked([]);
+  };
+
   const onClickCard = (e) => {
+    // get clicked card by id
     const cardId = e.target.id;
     const card = cards.find((card) => card.id === `${cardId}`);
-
     console.log(card);
+    // check if card has already been clicked
     if (card.clicked) {
       console.log("restart game");
       // restart game by resetting state
-      const defaultState = [
-        { urlImg: imgAmy, id: uniqid(), clicked: false },
-        { urlImg: imgBender, id: uniqid(), clicked: false },
-        { urlImg: imgBrannigan, id: uniqid(), clicked: false },
-        { urlImg: imgConrad, id: uniqid(), clicked: false },
-        { urlImg: imgFry, id: uniqid(), clicked: false },
-        { urlImg: imgLeela, id: uniqid(), clicked: false },
-        { urlImg: imgLuigi, id: uniqid(), clicked: false },
-        { urlImg: imgMario, id: uniqid(), clicked: false },
-        { urlImg: imgMom, id: uniqid(), clicked: false },
-        { urlImg: imgNibbler, id: uniqid(), clicked: false },
-        { urlImg: imgProfessor, id: uniqid(), clicked: false },
-        { urlImg: imgZoidberg, id: uniqid(), clicked: false },
-      ];
-
-      setCards([...defaultState]);
+      resetState();
+      // empty already clicked array
+      emptyAlreadyClicked();
     } else {
-      // update clicked-state
+      // update clicked-state for object
       clickedState(cardId);
+      // push id to alreadyClicked-array
+      updateAlreadyClicked(cardId);
     }
   };
+
+  // useEffect(() => {
+  //   // winning condition
+  //   if (alreadyClicked.length === 12) {
+  //     console.log("you win");
+  //   }
+  // }, [alreadyClicked, gameStatus]);
 
   return (
     <div id="card--container">
@@ -100,6 +145,8 @@ const Card = (props) => {
           />
         );
       })}
+
+      {alreadyClicked.length === 12 && <div className="win">You Won</div>}
     </div>
   );
 };
