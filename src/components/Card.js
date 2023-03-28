@@ -53,7 +53,7 @@ const Card = (props) => {
       ...newCardsArr[idx],
       clicked: true,
     };
-
+    shuffleArray(newCardsArr);
     setCards([...newCardsArr]);
   };
 
@@ -70,7 +70,8 @@ const Card = (props) => {
     }
   };
 
-  const resetState = () => {
+  // revert state of cards to default
+  const resetCardArr = () => {
     const defaultState = [
       { urlImg: imgAmy, id: uniqid(), clicked: false },
       { urlImg: imgBender, id: uniqid(), clicked: false },
@@ -89,6 +90,10 @@ const Card = (props) => {
     setCards([...defaultState]);
   };
 
+  const shuffleCardArr = () => {
+    setCards([...cards]);
+  };
+
   /**
    * update array with already clicked char
    * @param {string} id of clicked char
@@ -101,6 +106,28 @@ const Card = (props) => {
     setAlreadyClicked([]);
   };
 
+  const addScore = () => {
+    const oldScore = { ...score };
+
+    setScore({ ...score, currScore: oldScore.currScore + 1 });
+  };
+
+  const updateScore = () => {
+    const currBestScore = score.bestScore;
+    if (currBestScore <= score.currScore) {
+      setScore({
+        ...score,
+        bestScore: score.currScore,
+        currScore: 0,
+      });
+    } else {
+      setScore({
+        ...score,
+        currScore: 0,
+      });
+    }
+  };
+
   const onClickCard = (e) => {
     // get clicked card by id
     const cardId = e.target.id;
@@ -108,25 +135,23 @@ const Card = (props) => {
     console.log(card);
     // check if card has already been clicked
     if (card.clicked) {
+      // check best score
+      updateScore();
       console.log("restart game");
       // restart game by resetting state
-      resetState();
+      resetCardArr();
       // empty already clicked array
       emptyAlreadyClicked();
     } else {
+      addScore();
       // update clicked-state for object
       clickedState(cardId);
       // push id to alreadyClicked-array
       updateAlreadyClicked(cardId);
+      // restart game by resetting state
+      // shuffleCardArr();
     }
   };
-
-  // useEffect(() => {
-  //   // winning condition
-  //   if (alreadyClicked.length === 12) {
-  //     console.log("you win");
-  //   }
-  // }, [alreadyClicked, gameStatus]);
 
   return (
     <div id="card--container">
@@ -150,7 +175,7 @@ const Card = (props) => {
 
       {alreadyClicked.length === 12 && <div className="win">You Won</div>}
       {alreadyClicked.length === 12 && (
-        <button id="btn--restart">Restart</button>
+        <div id="btn--restart">Click on any tile to restart game</div>
       )}
     </div>
   );
