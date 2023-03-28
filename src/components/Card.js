@@ -145,8 +145,13 @@ const Card = (props) => {
           />
         );
       })}
+      <div id="current--score">Score: {score.currScore}</div>
+      <div id="best--score">Best Score: {score.bestScore}</div>
 
       {alreadyClicked.length === 12 && <div className="win">You Won</div>}
+      {alreadyClicked.length === 12 && (
+        <button id="btn--restart">Restart</button>
+      )}
     </div>
   );
 };
