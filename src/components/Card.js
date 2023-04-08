@@ -42,6 +42,7 @@ const Card = (props) => {
   /**
    * update state of clicked object
    * updating object in array
+   * shuffle cards in array
    * @param {integer} id of object
    */
   const clickedState = (id) => {
@@ -88,10 +89,6 @@ const Card = (props) => {
     ];
     shuffleArray(defaultState);
     setCards([...defaultState]);
-  };
-
-  const shuffleCardArr = () => {
-    setCards([...cards]);
   };
 
   /**
